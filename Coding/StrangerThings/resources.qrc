@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/door_locked.png</file>
+        <file>assets/door_open.png</file>
+        <file>assets/eleven.png</file>
+        <file>assets/papa.png</file>
+        <file>assets/trap.png</file>
+        <file>assets/treasure.png</file>
+    </qresource>
+</RCC>
