@@ -15,7 +15,7 @@ protected:
     bool     alive;
 public:
     Character(QString name, int hp, int atk, int def, Position pos);
-
+    virtual ~Character() = default;
 
     Position getPosition() const;
     void     setPosition(Position p);

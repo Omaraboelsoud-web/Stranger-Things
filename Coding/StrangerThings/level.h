@@ -31,7 +31,7 @@ public:
     bool isCompleted()          const;
     void setCompleted(bool val);
 
-    // Called after enemy dies: unlock door tile on the map
+
     void onEnemyDefeated();
 };
 

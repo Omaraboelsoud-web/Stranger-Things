@@ -1,6 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-
+#include <QString>
 #include "character.h"
 #include "gridmap.h"
 
@@ -15,9 +15,9 @@ public:
     int  getMaxAP()  const;
     bool canAct()    const;
     void resetAP();
-    bool useAP(int cost);   // returns false if insufficient
+    bool useAP(int cost);
 
-    // Psychic attack: line-of-sight, range 3, same row or column
+
     bool canUsePsychicAttack(Position targetPos, GridMap* map) const;
 };
 

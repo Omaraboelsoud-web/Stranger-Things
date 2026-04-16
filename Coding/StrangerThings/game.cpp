@@ -7,7 +7,7 @@ Game::Game(QObject* parent)
 {
     level       = std::make_unique<Level>();
     turnManager = std::make_unique<TurnManager>();
-    view        = new GameView();   // top-level window
+    view        = new GameView();
 
     connect(view, &GameView::moveRequested,         this, &Game::onMoveRequested);
     connect(view, &GameView::psychicAttackRequested, this, &Game::onPsychicAttackRequested);
@@ -31,7 +31,7 @@ void Game::restartLevel() {
     view->showMessage("Level restarted. Defeat Papa!");
 }
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+
 
 void Game::runEnemyTurn() {
     Enemy* e = level->getEnemy();
@@ -45,7 +45,7 @@ void Game::runEnemyTurn() {
     checkLoseCondition();
 
     if (!gameOver) {
-        // Short delay so player can see enemy move before control returns
+
         QTimer::singleShot(400, this, [this]() {
             turnManager->startPlayerTurn(level->getPlayer());
             view->redraw(true);
@@ -72,7 +72,7 @@ void Game::checkLoseCondition() {
     }
 }
 
-// ─── Slots ──────────────────────────────────────────────────────────────────
+
 
 void Game::onMoveRequested(int dx, int dy) {
     if (gameOver) return;
@@ -88,7 +88,7 @@ void Game::onMoveRequested(int dx, int dy) {
 
     Position dest(p->getPosition().x + dx, p->getPosition().y + dy);
 
-    // Trying to move onto enemy = melee attack
+
     if (e->isAlive() && dest.equals(e->getPosition())) {
         if (!p->useAP(1)) { view->showMessage("Not enough AP!"); return; }
         e->takeDamage(p->getAttack());
@@ -101,12 +101,12 @@ void Game::onMoveRequested(int dx, int dy) {
             view->showMessage(QString("Hit Papa for %1 damage!").arg(p->getAttack()));
         }
 
-        // AP check
+
         if (!p->canAct()) { onEndTurnRequested(); return; }
         return;
     }
 
-    // Check destination walkability
+
     if (!level->getMap()->isWalkable(dest)) {
         if (level->getDoor()->isLocked() &&
             dest.equals(level->getDoor()->getPosition()))
@@ -116,18 +116,18 @@ void Game::onMoveRequested(int dx, int dy) {
         return;
     }
 
-    // Move
+
     if (!p->useAP(1)) { view->showMessage("Not enough AP!"); return; }
     p->setPosition(dest);
 
-    // Trap check
+
     Trap* trap = level->getTrap();
     if (!trap->isTriggered() && dest.equals(trap->getPosition())) {
         trap->trigger(p);
         view->showMessage(QString("TRAP! Eleven takes 2 damage! HP: %1").arg(p->getHealth()));
     }
 
-    // Treasure check
+
     Treasure* treasure = level->getTreasure();
     if (!treasure->isCollected() && dest.equals(treasure->getPosition())) {
         if (!level->getEnemy()->isAlive()) {
@@ -171,7 +171,7 @@ void Game::onPsychicAttackRequested() {
 
     if (!p->useAP(1)) return;
 
-    // Psychic deals attack + 1 (stronger than melee, but conditional)
+
     int dmg = p->getAttack() + 1;
     e->takeDamage(dmg);
     view->showMessage(QString("✦ PSYCHIC BLAST! Papa takes %1 damage!").arg(dmg));

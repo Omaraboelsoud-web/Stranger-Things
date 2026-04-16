@@ -5,7 +5,7 @@
 HUD::HUD(QGraphicsScene* s, int mapHeightPx)
     : scene(s), hudY(mapHeightPx)
 {
-    // Dark background bar
+
     hudBg = scene->addRect(
         0, hudY, 480, 100,
         QPen(Qt::NoPen),

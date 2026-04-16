@@ -17,7 +17,7 @@ private:
     QGraphicsTextItem* turnInfo;
     QGraphicsTextItem* messageLabel;
 
-    int hudY;   // y-pixel where HUD starts (below the map)
+    int hudY;
 
 public:
     HUD(QGraphicsScene* scene, int mapHeightPx);

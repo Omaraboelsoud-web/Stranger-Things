@@ -18,11 +18,11 @@ private:
     Level*          level;
     HUD*            hud;
 
-    // Sprite items reused every redraw
+
     QGraphicsPixmapItem* playerSprite;
     QGraphicsPixmapItem* enemySprite;
 
-    // Tile pixmaps (loaded once)
+
     QPixmap pxFloor, pxWall, pxTrap, pxDoorLocked, pxDoorOpen, pxTreasure;
     QPixmap pxEleven, pxPapa;
 

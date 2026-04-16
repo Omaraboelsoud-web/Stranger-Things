@@ -6,7 +6,7 @@
 #include <QPixmap>
 #include <QPainter>
 
-// Fallback colored rectangle when image file is missing
+
 static QPixmap colorPixmap(QColor c, int w = TILE, int h = TILE) {
     QPixmap px(w, h);
     px.fill(c);
@@ -27,14 +27,13 @@ GameView::GameView(QWidget* parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFocusPolicy(Qt::StrongFocus);
 
-    // Dark background
     setBackgroundBrush(QColor(10, 10, 15));
 }
 
 GameView::~GameView() {}
 
 void GameView::loadPixmaps() {
-    // Try to load real assets; fall back to colored blocks
+
     auto load = [](const QString& path, QColor fallback) {
         QPixmap px(path);
         return px.isNull() ? colorPixmap(fallback) : px.scaled(TILE, TILE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -58,7 +57,7 @@ void GameView::initLevel(Level* lvl) {
 
     if (!spritesLoaded) loadPixmaps();
 
-    // Persistent character sprites
+
     playerSprite = scene->addPixmap(pxEleven);
     playerSprite->setZValue(2);
 
@@ -95,9 +94,7 @@ void GameView::drawMap() {
 }
 
 void GameView::drawObjects() {
-    // Trap already shown via tile; nothing extra needed for now.
-    // Treasure already shown via tile.
-    // Collected treasure: dim it
+
     if (level->getTreasure()->isCollected()) {
         auto* dim = scene->addRect(
             level->getTreasure()->getPosition().x * TILE,
@@ -130,7 +127,7 @@ void GameView::drawCharacters() {
 void GameView::redraw(bool isPlayerTurn) {
     QList<QGraphicsItem*> all = scene->items();
     for (auto* item : all) {
-        if (item->zValue() < 2) {   // only remove map tiles/overlays
+        if (item->zValue() < 2) {
             scene->removeItem(item);
             delete item;
         }

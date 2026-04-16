@@ -13,7 +13,7 @@ class Game : public QObject {
 private:
     std::unique_ptr<Level>       level;
     std::unique_ptr<TurnManager> turnManager;
-    GameView*                    view;   // Qt-owned window
+    GameView*                    view;
 
     bool gameOver;
 

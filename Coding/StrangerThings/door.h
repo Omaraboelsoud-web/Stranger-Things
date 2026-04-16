@@ -15,7 +15,7 @@ public:
     bool     isLocked()    const;
     bool     isOpen()      const;
 
-    void unlock();   // removes wall from GridMap tile
+    void unlock();
     void openDoor();
 };
 

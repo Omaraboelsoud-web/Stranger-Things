@@ -9,7 +9,7 @@ bool Enemy::isAdjacentTo(Position p) const {
 }
 
 Position Enemy::getNextMoveToward(Position target, GridMap* map) const {
-    // Try all 4 directions, pick the one closest to target that is walkable
+
     Position dirs[4] = {
         Position(position.x+1, position.y),
         Position(position.x-1, position.y),
@@ -35,10 +35,10 @@ void Enemy::takeTurn(Player* player, GridMap* map) {
     Position pPos = player->getPosition();
 
     if (isAdjacentTo(pPos)) {
-        // Attack
+
         player->takeDamage(attackPower);
     } else {
-        // Move toward player
+
         Position next = getNextMoveToward(pPos, map);
         if (!next.equals(position)) {
             position = next;
