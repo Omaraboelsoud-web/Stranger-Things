@@ -1,44 +1,44 @@
-#include "gameview.h"
-#include <QKeyEvent>
-#include <QBrush>
-#include <QPen>
-#include <QGraphicsRectItem>
-#include <QPixmap>
-#include <QPainter>
+#include "gameview.h"//includes the gameview class
+#include <QKeyEvent>//handles keyboard input
+#include <QBrush>//to color objects
+#include <QPen>// for drawing outlines
+#include <QGraphicsRectItem>//rectangle graphics items
+#include <QPixmap>//for handling images
+#include <QPainter>// to draw on pixmaps
 
-
+//creates a colored square pixmap if image doesnt load
 static QPixmap colorPixmap(QColor c, int w = TILE, int h = TILE) {
-    QPixmap px(w, h);
-    px.fill(c);
-    return px;
+    QPixmap px(w, h); //create pixmap
+    px.fill(c);//fill it with a color
+    return px;//return the pixmap
 }
-
+//initializes the game view
 GameView::GameView(QWidget* parent)
-    : QGraphicsView(parent),
-    scene(new QGraphicsScene(this)),
-    level(nullptr), hud(nullptr),
-    playerSprite(nullptr), enemySprite(nullptr),
-    spritesLoaded(false)
+    : QGraphicsView(parent),// base class constructor
+    scene(new QGraphicsScene(this)),// create graphics scene
+    level(nullptr), hud(nullptr),// no level or HUD yet
+    playerSprite(nullptr), enemySprite(nullptr),// sprites not created yet
+    spritesLoaded(false) // images not loaded yet
 {
-    setScene(scene);
-    setWindowTitle("Stranger Things: The Dungeon — Level 1");
-    setFixedSize(12 * TILE + 2, 9 * TILE + 102);   // map + HUD
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setFocusPolicy(Qt::StrongFocus);
+    setScene(scene);// connect scene to view
+    setWindowTitle("Stranger Things: The Dungeon — Level 1");// window title
+    setFixedSize(12 * TILE + 2, 9 * TILE + 102);   // size of window
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);// disable scroll
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);// disable scroll
+    setFocusPolicy(Qt::StrongFocus);// allows keyboard input
 
-    setBackgroundBrush(QColor(10, 10, 15));
+    setBackgroundBrush(QColor(10, 10, 15));// dark background color
 }
 
-GameView::~GameView() {}
+GameView::~GameView() {}// destructor
 
-void GameView::loadPixmaps() {
-
+void GameView::loadPixmaps() {// loads all image assets
+    // function to load image or color
     auto load = [](const QString& path, QColor fallback) {
-        QPixmap px(path);
-        return px.isNull() ? colorPixmap(fallback) : px.scaled(TILE, TILE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        QPixmap px(path);// try loading image
+        return px.isNull() ? colorPixmap(fallback) : px.scaled(TILE, TILE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);// use color if failed and resize image
     };
-
+    //load all tile images
     pxFloor      = load(":/assets/floor.png",       QColor(50,  50,  60));
     pxWall       = load(":/assets/wall.png",        QColor(30,  30,  40));
     pxTrap       = load(":/assets/trap.png",        QColor(180, 60,  0));
@@ -48,109 +48,111 @@ void GameView::loadPixmaps() {
     pxEleven     = load(":/assets/eleven.png",      QColor(60,  120, 255));
     pxPapa       = load(":/assets/papa.png",        QColor(200, 40,  40));
 
-    spritesLoaded = true;
+    spritesLoaded = true;//shows that images have loaded
 }
-
+// initializes level and creates sprites and HUD
 void GameView::initLevel(Level* lvl) {
-    level = lvl;
-    scene->clear();
+    level = lvl;// store level
+    scene->clear(); // clear previous scene
 
-    if (!spritesLoaded) loadPixmaps();
+    if (!spritesLoaded) loadPixmaps();// load images
 
-
+    // create player sprite
     playerSprite = scene->addPixmap(pxEleven);
-    playerSprite->setZValue(2);
-
+    playerSprite->setZValue(2);// draw above tiles
+    // create enemy sprite
     enemySprite = scene->addPixmap(pxPapa);
-    enemySprite->setZValue(2);
+    enemySprite->setZValue(2);// draw above tiles
 
-    hud = new HUD(scene, 9 * TILE);
+    hud = new HUD(scene, 9 * TILE);// create HUD under the map
 }
-
+// draws map tiles
 void GameView::drawMap() {
-    GridMap* map = level->getMap();
-    Door*    door = level->getDoor();
+    GridMap* map = level->getMap();// get map data
+    Door*    door = level->getDoor(); // get door state like whether locked or unlocked
 
+    // loop through all tiles
     for (int y = 0; y < map->getHeight(); y++) {
         for (int x = 0; x < map->getWidth(); x++) {
-            Tile t = map->getTile(Position(x, y));
-            QPixmap* px = &pxFloor;
+            Tile t = map->getTile(Position(x, y));// get tile
+            QPixmap* px = &pxFloor;//shows that the default is the floor
 
-            switch (t.getType()) {
+            switch (t.getType()) {// choose correct image based on tile type
             case Wall:         px = &pxWall;       break;
             case TrapTile:     px = &pxTrap;       break;
             case TreasureTile: px = &pxTreasure;   break;
             case DoorTile:
-                px = door->isOpen() ? &pxDoorOpen : &pxDoorLocked;
+                px = door->isOpen() ? &pxDoorOpen : &pxDoorLocked;// open/closed door
                 break;
             default:           px = &pxFloor;      break;
             }
 
-            auto* item = scene->addPixmap(*px);
-            item->setPos(x * TILE, y * TILE);
-            item->setZValue(0);
+            auto* item = scene->addPixmap(*px);// draw tile on scene
+            item->setPos(x * TILE, y * TILE); // the position on grid
+            item->setZValue(0);// draw background
         }
     }
 }
-
+// draws objects
 void GameView::drawObjects() {
 
-    if (level->getTreasure()->isCollected()) {
+    if (level->getTreasure()->isCollected()) {// if treasure is collected it darkens the tile
         auto* dim = scene->addRect(
             level->getTreasure()->getPosition().x * TILE,
             level->getTreasure()->getPosition().y * TILE,
             TILE, TILE,
-            QPen(Qt::NoPen), QBrush(QColor(0, 0, 0, 160)));
-        dim->setZValue(1);
+            QPen(Qt::NoPen), QBrush(QColor(0, 0, 0, 160)));//sort of transparent layer on top
+        dim->setZValue(1);//draws this dark layer on top of the tiles but under the player and enemy
     }
 }
 
-void GameView::drawCharacters() {
-    Player* p = level->getPlayer();
-    Enemy*  e = level->getEnemy();
+void GameView::drawCharacters() {// draws and updates player and enemy positions
+    Player* p = level->getPlayer();// get player
+    Enemy*  e = level->getEnemy();// get enemy
 
-    if (p->isAlive()) {
+    if (p->isAlive()) {// update player
         playerSprite->setPos(p->getPosition().x * TILE, p->getPosition().y * TILE);
         playerSprite->setVisible(true);
-    } else {
+    } else {// hide if dead
         playerSprite->setVisible(false);
     }
 
-    if (e->isAlive()) {
+    if (e->isAlive()) { // update enemy
         enemySprite->setPos(e->getPosition().x * TILE, e->getPosition().y * TILE);
         enemySprite->setVisible(true);
-    } else {
+    } else {// hide if dead
         enemySprite->setVisible(false);
     }
 }
 
-void GameView::redraw(bool isPlayerTurn) {
-    QList<QGraphicsItem*> all = scene->items();
+void GameView::redraw(bool isPlayerTurn) {// redraws the entire scene
+    QList<QGraphicsItem*> all = scene->items();// removes all old tiles and objects but keeps characters
     for (auto* item : all) {
-        if (item->zValue() < 2) {
+        if (item->zValue() < 2) {//if  item is not a character then it removes it
             scene->removeItem(item);
             delete item;
         }
     }
-    drawMap();
-    drawObjects();
-    drawCharacters();
-    if (hud) hud->update(level->getPlayer(), level->getEnemy(), isPlayerTurn);
+    drawMap();// draw tiles
+    drawObjects();// draw objects
+    drawCharacters();// update character
+    if (hud) hud->update(level->getPlayer(), level->getEnemy(), isPlayerTurn);// it updates HUD
 }
 
-void GameView::showMessage(const QString& msg) {
+void GameView::showMessage(const QString& msg) {// displays message on HUD
     if (hud) hud->showMessage(msg);
 }
 
-void GameView::keyPressEvent(QKeyEvent* event) {
-    switch (event->key()) {
+void GameView::keyPressEvent(QKeyEvent* event) {// handles keyboard input
+
+    switch (event->key()) { // movement controls so the arrow keys and WASD
     case Qt::Key_Up:    case Qt::Key_W: emit moveRequested( 0, -1); break;
     case Qt::Key_Down:  case Qt::Key_S: emit moveRequested( 0,  1); break;
     case Qt::Key_Left:  case Qt::Key_A: emit moveRequested(-1,  0); break;
     case Qt::Key_Right: case Qt::Key_D: emit moveRequested( 1,  0); break;
-    case Qt::Key_Q:                     emit psychicAttackRequested(); break;
+    case Qt::Key_Q:                     emit psychicAttackRequested(); break;// enables special ability
     case Qt::Key_Return:
-    case Qt::Key_Space:                 emit endTurnRequested(); break;
-    default: break;
+    case Qt::Key_Space:                 emit endTurnRequested(); break;// end turn
+    default: break;// ignore other keys
     }
 }
