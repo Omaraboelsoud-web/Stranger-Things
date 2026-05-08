@@ -15,19 +15,31 @@ private:
     std::unique_ptr<TurnManager> turnManager; // Controls memory and handles between switching the turns from enemy to player
     GameView*                    view; // This is a pointer to UI system that shows how the game will talk to the screen and display images also change as the enemy and character take actions
     bool gameOver; // Checks whether the game has ended or no. True for end. False for game still running
+    int  currentLevelNum; // Stores the current level number from 1-5 so the game knows which level the player is on
+
     void runEnemyTurn(); // This will run all enemy actions during the enemy's turn
     void checkWinCondition(); // This checks if the player has met the game's win conditions or not yet
     void checkLoseCondition(); // This checks if the player has lost or yet
+
+    // Advance to the next level, carrying player HP over
+    void advanceLevel(); // This moves the player to the next level while keeping the player's Hp
+
+    // Save / load helpers
+    QString saveFilePath() const; // Returns the file path that will be used to save and load the game
 
 public:
     explicit Game(QObject* parent = nullptr); // explicit is a C++ function that prevents unwanted automatic conversions when calling constructors. Game is a constructor and QObject* is a pointer to a Qt object partent is the name and will own the game. When I do it = to nullptr it makes it a default value.
     void startGame(); // Starts the game
     void restartLevel(); // Restarts the current level
+    void saveGame(); // Saves the current game data
+    void loadGame(); // Loads previously saved game data
 
 public slots: // These are the functions that use and respond to the signal events
     void onMoveRequested(int dx, int dy); // Handles player movements
     void onPsychicAttackRequested(); //Handles the special ability of the player
     void onEndTurnRequested(); // Ends the player's turn
+    void onSaveRequested(); // Handles save button requests from the UI
+    void onLoadRequested(); // Handles load button requests from the UI
 };
 
 #endif

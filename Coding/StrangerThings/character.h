@@ -13,9 +13,12 @@ protected: //Better than private so I can access the variables without issues in
     int      defense; // Stores the defense which reduces the damage on character
     Position position; //Stores the characters location on the map
     bool     alive; // Checks if character is alive or not true alive false dead
+
 public: //public because I wabt it to be accessible anywhere in the program
     Character(QString name, int hp, int atk, int def, Position pos); // Constructer initializing new character with name, hp, attack power, defense value, and starting position
     virtual ~Character() = default; // Makes sure the program is clean when derrived objects are deleted. I used virtual because it is a base class so not using virtual can cause memory leaks
+
+    QString  getName()     const; // Returns the characters name
     Position getPosition() const; // Returns the characters current position
     void     setPosition(Position p); // Updates the characters position
     int  getHealth()    const; // returns the characters current health

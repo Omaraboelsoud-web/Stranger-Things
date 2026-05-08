@@ -1,17 +1,30 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "character.h" //Includes my custom character classes which I'll use so makes it easier for me rather than creating to many functions
-#include "gridmap.h" //Includes my custom gridmap classes which I'll use so makes it easier for me rather than creating to many functions
+#include <QVector>              // used for storing lists (like multiple enemies or paths)
+#include "character.h"          // base class that Enemy inherits common stats/behavior from
+#include "gridmap.h"            // gives access to the game map so enemy can move intelligently
+#include "tile.h"               // defines tile types (wall, floor, etc.)
 
-class Player; // This makes sure that player class exists
+class Player;                   // forward declaration so we can use Player pointer without full include
 
-class Enemy : public Character { // Class Enemy inherrits from class Character, // I'll declare all functions and attributes here
-public: // Everything will be accessed throughout the whole program
-    Enemy(QString name, int hp, int atk, int def, Position pos); // enemy Constructor with name, health, attack power, defense, and position
-    void     takeTurn(Player* player, GridMap* map); // This will control what the enemy does in his turn Player* player makes the enemy attack and GridMap* map makes the enemy move
-    bool     isAdjacentTo(Position p) const; //Check if the player is in the attack range, return true if it is and return false if it is not.
-    Position getNextMoveToward(Position target, GridMap* map) const; // This will make the AI enemy calculate the next best step to take towards the character. Will use the players location and the gridmap to calculate and see this is like the AI thinking of the enemy
+class Enemy : public Character { // Enemy is a type of Character (inherits HP, ATK, DEF, position, etc.)
+public:
+    Enemy(QString name, int hp, int atk, int def, Position pos);
+    // constructor: creates an enemy with name, stats, and starting position
+
+    void takeTurn(Player* player, GridMap* map,
+                  const QVector<Enemy*>& allEnemies);
+    // main AI function: controls what enemy does during its turn
+    // uses player position + map + other enemies for decisions (move/attack/etc.)
+
+    bool isAdjacentTo(Position p) const;
+    // checks if a given position is next to the enemy (used for melee attacks)
+
+    Position getNextMoveToward(Position target, GridMap* map,
+                               const QVector<Enemy*>& allEnemies) const;
+    // AI path decision: calculates best next step toward a target (usually the player)
+    // avoids walls, traps, and other enemies using map data
 };
 
 #endif

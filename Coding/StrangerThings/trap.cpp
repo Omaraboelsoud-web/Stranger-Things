@@ -9,3 +9,5 @@ void Trap::trigger(Character* c) { // Defines a function that activates the trap
     c->takeDamage(damage); //Applies damage to the character by calling its takeDamage function
     triggered = true; // Marks the trap as triggered so it cannot activate again
 }
+
+void Trap::setTriggered(bool val) { triggered = val; } // Sets the trap's triggered status to the value passed into the function
