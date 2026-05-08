@@ -1,8 +1,5 @@
 #include "level.h"
 
-// ============================================================
-//  Helper
-// ============================================================
 void Level::addBorderWalls(int W, int H) { // Defines a helper function that adds walls around the border of the map
     for (int x = 0; x < W; x++) { // Loops over every column in the grid
         map->setTile(Position(x, 0),   Tile(Wall, false)); // Places a wall tile on the top border row
@@ -14,7 +11,6 @@ void Level::addBorderWalls(int W, int H) { // Defines a helper function that add
     }
 }
 
-// ============================================================
 //  Level 1 -- "The Lab" (original layout, one enemy, one trap)
 //
 //  y=0  # # # # # # # # # # # #
@@ -27,7 +23,6 @@ void Level::addBorderWalls(int W, int H) { // Defines a helper function that add
 //  y=7  # . . . . . . . . D $ #
 //  y=8  # # # # # # # # # # # #
 //       0 1 2 3 4 5 6 7 8 9 10 11
-// ============================================================
 void Level::buildLevel1() { // Defines the function that builds level 1 "The Lab"
     const int W = 12, H = 9; // Sets the width and height of the level grid
     map = new GridMap(W, H); // Creates a new grid map with the specified dimensions
@@ -68,11 +63,8 @@ void Level::buildLevel1() { // Defines the function that builds level 1 "The Lab
 //  y=5  # . # # # . # . . . . . . #
 //  y=6  # . . . . . # . . E1. . . #
 //  y=7  # . . T . . . . . . E2. D #
-//  y=8  # # # # # # # # # # # # $ #     <- treasure outside door column
-//       Actually put $ at (12,7) and D at (11,7)
-//  y=8  # # # # # # # # # # # # # #
+//  y=8  # # # # # # # # # # # # $ #
 //       0 1 2 3 4 5 6 7 8 9 0 1 2 3
-// ============================================================
 void Level::buildLevel2() { // Defines the function that builds level 2 "The Upside Down Tunnels"
     const int W = 14, H = 9; // Sets the width and height of the level grid, wider than level 1
     map = new GridMap(W, H); // Creates a new grid map with the specified dimensions
@@ -121,7 +113,6 @@ void Level::buildLevel2() { // Defines the function that builds level 2 "The Ups
     enemies.append(new Enemy("Lab Soldier",      6, 3, 1, Position(10, 7))); // Spawns Lab Soldier with 6 HP, 3 ATK, 1 DEF at (10,7)
 }
 
-// ============================================================
 //  Level 3 -- "The Mind Flayer's Lair"
 //  Same 14x10 grid, three enemies, three traps, maze-like.
 //
@@ -133,10 +124,9 @@ void Level::buildLevel2() { // Defines the function that builds level 2 "The Ups
 //  y=5  # . # . . . . . . . . . . #
 //  y=6  # . # . # # # # . . E1. . #
 //  y=7  # . . . # . . . . . . E2. #
-//  y=8  # T . . # . T . . . . . D #   <- D at (11,8), $ at (12,8)
+//  y=8  # T . . # . T . . . . . D #
 //  y=9  # # # # # # # # # # # # # #
-//       Wait, H=10 so y=9 is bottom wall. Put $ at (12,8) and D at (11,8).
-// ============================================================
+
 void Level::buildLevel3() { // Defines the function that builds level 3 "The Mind Flayer's Lair"
     const int W = 14, H = 10; // Sets the width and height of the level grid, taller than level 2
     map = new GridMap(W, H); // Creates a new grid map with the specified dimensions
@@ -188,7 +178,6 @@ void Level::buildLevel3() { // Defines the function that builds level 3 "The Min
     enemies.append(new Enemy("Flayed Soldier",   7, 2, 0, Position(5,  5))); // Spawns Flayed Soldier with 7 HP, 2 ATK, 0 DEF at (5,5)
 }
 
-// ============================================================
 //  Level 4 -- "The Starcourt Basement"
 //  16x10, four enemies, four traps, tight corridors.
 //
@@ -203,7 +192,7 @@ void Level::buildLevel3() { // Defines the function that builds level 3 "The Min
 //  y=8  # T . T . . . . . . . . E . D #
 //       Put D at (13,8) and $ at (14,8)
 //  y=9  # # # # # # # # # # # # # # # #
-// ============================================================
+
 void Level::buildLevel4() { // Defines the function that builds level 4 "The Starcourt Basement"
     const int W = 16, H = 10; // Sets the width and height of the level grid, wider than previous levels
     map = new GridMap(W, H); // Creates a new grid map with the specified dimensions
@@ -268,7 +257,7 @@ void Level::buildLevel4() { // Defines the function that builds level 4 "The Sta
     enemies.append(new Enemy("Lab Guard",     7, 2, 1, Position(12, 8))); // Spawns Lab Guard with 7 HP, 2 ATK, 1 DEF at (12,8)
 }
 
-// ============================================================
+
 //  Level 5 -- "The Gate Room" (Final Boss)
 //  18x11, five enemies (boss + four guards), four traps.
 //  Boss: The Mind Flayer -- high HP, high ATK, high DEF.
@@ -285,7 +274,7 @@ void Level::buildLevel4() { // Defines the function that builds level 4 "The Sta
 //  y=9   # . . . . . . . . . . . . . D . $ #
 //  y=10  # # # # # # # # # # # # # # # # # #
 //        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7
-// ============================================================
+
 void Level::buildLevel5() { // Defines the function that builds level 5 "The Gate Room", the final boss level
     const int W = 18, H = 11; // Sets the width and height of the level grid, the largest map in the game
     map = new GridMap(W, H); // Creates a new grid map with the specified dimensions
@@ -351,9 +340,7 @@ void Level::buildLevel5() { // Defines the function that builds level 5 "The Gat
     enemies.append(new Enemy("Demodog 2",        7, 2, 0, Position(12, 3))); // Spawns Demodog 2 with 7 HP, 2 ATK, 0 DEF at (12,3)
 }
 
-// ============================================================
-//  Constructor
-// ============================================================
+
 Level::Level(int levelNumber, int /*playerHP*/, int /*playerAP*/)
     : map(nullptr), player(nullptr), door(nullptr), treasure(nullptr),
     completed(false), levelNum(levelNumber) // Initializes all pointers to nullptr and sets completed to false and levelNum to the given level number
@@ -376,9 +363,7 @@ Level::~Level() { // Defines the destructor that cleans up all dynamically alloc
     delete treasure; // Frees the memory allocated for the treasure
 }
 
-// ============================================================
-//  Getters
-// ============================================================
+
 GridMap*  Level::getMap()      const { return map; } // Returns a pointer to the level's grid map
 Player*   Level::getPlayer()   const { return player; } // Returns a pointer to the player object
 Door*     Level::getDoor()     const { return door; } // Returns a pointer to the door object
