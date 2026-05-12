@@ -40,6 +40,7 @@ public slots: // These are the functions that use and respond to the signal even
     void onEndTurnRequested(); // Ends the player's turn
     void onSaveRequested(); // Handles save button requests from the UI
     void onLoadRequested(); // Handles load button requests from the UI
+    void onLevelSelectRequested(int levelIndex); // Handles jumping directly to a level
 };
 
 #endif

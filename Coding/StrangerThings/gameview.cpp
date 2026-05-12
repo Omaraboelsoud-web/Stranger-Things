@@ -82,14 +82,14 @@ void GameView::loadPixmaps() {// loads all image assets
     };
 
     //load all tile images
-    pxFloor      = load(":/assets/floor.png",       QColor(50,  50,  60));
-    pxWall       = load(":/assets/wall.png",        QColor(30,  30,  40));
-    pxTrap       = load(":/assets/trap.png",        QColor(180, 60,  0));
+    pxFloor      = load(":/assets/floor.png", QColor(50,  50,  60));
+    pxWall       = load(":/assets/wall.png", QColor(30,  30,  40));
+    pxTrap       = load(":/assets/trap.png", QColor(180, 60,  0));
     pxDoorLocked = load(":/assets/door_locked.png", QColor(100, 70,  0));
-    pxDoorOpen   = load(":/assets/door_open.png",   QColor(160, 120, 40));
-    pxTreasure   = load(":/assets/treasure.png",    QColor(255, 210, 0));
-    pxEleven     = load(":/assets/eleven.png",      QColor(60,  120, 255));
-    pxPapa       = load(":/assets/papa.png",        QColor(200, 40,  40));
+    pxDoorOpen   = load(":/assets/door_open.png", QColor(160, 120, 40));
+    pxTreasure   = load(":/assets/treasure.png", QColor(255, 210, 0));
+    pxEleven     = load(":/assets/eleven.png", QColor(60,  120, 255));
+    pxPapa       = load(":/assets/papa.png", QColor(200, 40,  40));
 
     spritesLoaded = true;//shows that images have loaded
 }
@@ -232,12 +232,18 @@ void GameView::keyPressEvent(QKeyEvent* event) {// handles keyboard input
     case Qt::Key_Down:  case Qt::Key_S: emit moveRequested( 0,  1); break;
     case Qt::Key_Left:  case Qt::Key_A: emit moveRequested(-1,  0); break;
     case Qt::Key_Right: case Qt::Key_D: emit moveRequested( 1,  0); break;
-    case Qt::Key_Q:                     emit psychicAttackRequested(); break;// enables special ability
+    case Qt::Key_Q:  emit psychicAttackRequested(); break;// enables special ability
     case Qt::Key_Return:
-    case Qt::Key_Space:                 emit endTurnRequested(); break;// end turn
-    case Qt::Key_F5:                    emit saveRequested(); break; // Saves the game
-    case Qt::Key_F9:                    emit loadRequested(); break; // Loads saved game
-    case Qt::Key_Escape:                showNormal(); break; // ESC exits fullscreen
+    case Qt::Key_Space: emit endTurnRequested(); break;// end turn
+    case Qt::Key_F5: emit saveRequested(); break; // Saves the game
+    case Qt::Key_F9: emit loadRequested(); break; // Loads saved game
+    case Qt::Key_Escape: showNormal(); break; // ESC exits fullscreen
+    case Qt::Key_1: emit levelSelectRequested(1); break;
+    case Qt::Key_2: emit levelSelectRequested(2); break;
+    case Qt::Key_3: emit levelSelectRequested(3); break;
+    case Qt::Key_4: emit levelSelectRequested(4); break;
+    case Qt::Key_5: emit levelSelectRequested(5); break;
     default: break;// ignore other keys
+
     }
 }

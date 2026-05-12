@@ -19,6 +19,7 @@ Game::Game(QObject* parent)
     connect(view, &GameView::endTurnRequested,        this, &Game::onEndTurnRequested); // Triggers end of turn when player presses Enter or Space
     connect(view, &GameView::saveRequested,           this, &Game::onSaveRequested); // Triggers save when player presses F5
     connect(view, &GameView::loadRequested,           this, &Game::onLoadRequested); // Triggers load when player presses F9
+    connect(view, &GameView::levelSelectRequested, this, &Game::onLevelSelectRequested); // Triggers to the requested level when I press on 1-5
 }
 
 void Game::startGame() { // Initializes and starts the game from the beginning
@@ -418,4 +419,13 @@ void Game::onSaveRequested() { // This slot is triggered when the player presses
 
 void Game::onLoadRequested() { // This slot is triggered when the player presses F9 and calls the load function
     loadGame(); // Calls loadGame to read the save file and restore the game state
+}
+void Game::onLevelSelectRequested(int levelIndex) {
+    currentLevelNum = levelIndex; // Sets the level to the one the player chose
+    gameOver = false; // Resets game state so the level runs fresh
+    level = std::make_unique<Level>(currentLevelNum); // Creates and loads the selected level
+    view->initLevel(level.get()); // Rebuilds the visual map for the selected level
+    turnManager->startPlayerTurn(level->getPlayer()); // Starts the player's turn and resets AP
+    view->redraw(true); // Updates the screen to display the newly loaded level
+    view->showMessage(QString("jumped to Level %1").arg(levelIndex)); // Displays a confirmation message
 }

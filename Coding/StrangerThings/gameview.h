@@ -51,6 +51,7 @@ signals:
     void endTurnRequested(); //indicates that the player wants to end their turn
     void saveRequested(); // indicates that the player wants to save the game
     void loadRequested(); // indicates that the player wants to load a saved game
+    void levelSelectRequested(int levelIndex); // go through any level wanted when player presses 1-5
 
 protected:
     void keyPressEvent(QKeyEvent* event) override; //contains information about which key was pressed and override means this function replaces the default behavior
