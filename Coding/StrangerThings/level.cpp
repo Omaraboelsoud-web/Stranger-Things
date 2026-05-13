@@ -48,7 +48,7 @@ void Level::buildLevel1() { // Defines the function that builds level 1 "The Lab
     map->setTile(treasure->getPosition(), Tile(TreasureTile, true)); // Marks the treasure's position on the map as a visible treasure tile
 
     player = new Player("Eleven", 10, 3, 1, Position(1, 1), 2); // Spawns the player Eleven with 10 HP, 3 ATK, 1 DEF at position (1,1)
-    enemies.append(new Enemy("Demogorgon", 8, 2, 0, Position(9, 6))); // Spawns enemy Demogorgon with 8 HP, 2 ATK, 0 DEF at position (9,6)
+    enemies.append(new Enemy("Papa", 8, 2, 0, Position(9, 6))); // Spawns enemy Papa with 8 HP, 2 ATK, 0 DEF at position (9,6)
 }
 
 // ============================================================
@@ -173,7 +173,7 @@ void Level::buildLevel3() { // Defines the function that builds level 3 "The Min
 
     player = new Player("Eleven", 10, 3, 1, Position(1, 1), 2); // Spawns the player Eleven at (1,1) with the same base stats
 
-    enemies.append(new Enemy("Demogorgon",      10, 3, 0, Position(10, 6))); // Spawns Demogorgon with 10 HP, 3 ATK, 0 DEF at (10,6)
+    enemies.append(new Enemy("DemoBat",      10, 3, 0, Position(10, 6))); // Spawns Demobat with 10 HP, 3 ATK, 0 DEF at (10,6)
     enemies.append(new Enemy("Demogorgon",  8, 2, 1, Position(11, 7))); // Spawns Demogorgon with 8 HP, 2 ATK, 1 DEF at (11,7)
     enemies.append(new Enemy("Demogorgon",   7, 2, 0, Position(5,  5))); // Spawns Demogorgon with 7 HP, 2 ATK, 0 DEF at (5,5)
 }
@@ -253,8 +253,8 @@ void Level::buildLevel4() { // Defines the function that builds level 4 "The Sta
 
     enemies.append(new Enemy("Demogorgon",   10, 3, 0, Position(10, 6))); // Spawns Demogorgon with 10 HP, 3 ATK, 0 DEF at (10,6)
     enemies.append(new Enemy("Demogorgon", 10, 3, 1, Position(11, 7))); // Spawns Demogorgon with 10 HP, 3 ATK, 1 DEF at (11,7)
-    enemies.append(new Enemy("Demogorgon",  8, 2, 0, Position(5,  3))); // Spawns Demogorgon with 8 HP, 2 ATK, 0 DEF at (5,3)
-    enemies.append(new Enemy("Demogorgon",     7, 2, 1, Position(12, 8))); // Spawns Demogorgon with 7 HP, 2 ATK, 1 DEF at (12,8)
+    enemies.append(new Enemy("DemoBat",     8, 2, 0, Position(5,  3))); // Spawns Demobat with 8 HP, 2 ATK, 0 DEF at (5,3)
+    enemies.append(new Enemy("DemoBat",     7, 2, 1, Position(12, 8))); // Spawns Demobat with 7 HP, 2 ATK, 1 DEF at (12,8)
 }
 
 
@@ -332,10 +332,10 @@ void Level::buildLevel5() { // Defines the function that builds level 5 "The Gat
     player = new Player("Eleven", 10, 3, 1, Position(1, 1), 2); // Spawns the player Eleven at (1,1) with the same base stats
 
     // BOSS: The Mind Flayer -- very tough
-    enemies.append(new Enemy("Demogorgon", 20, 4, 2, Position(9,  8))); // Spawns the Mind Flayer boss with 20 HP, 4 ATK, 2 DEF at (9,8)
+    enemies.append(new Enemy("MindFlayer", 20, 4, 2, Position(9,  8))); // Spawns the Mind Flayer boss with 20 HP, 4 ATK, 2 DEF at (9,8)
     // Four guards protecting the boss
-    enemies.append(new Enemy("Demogorgon",   8, 3, 1, Position(14, 6))); // Spawns Demogorgon with 8 HP, 3 ATK, 1 DEF at (14,6)
-    enemies.append(new Enemy("Demogorgon",   8, 3, 1, Position(15, 7))); // Spawns Demogorgon with 8 HP, 3 ATK, 1 DEF at (15,7)
+    enemies.append(new Enemy("DemoBat",   8, 3, 1, Position(14, 6))); // Spawns Demogorgon with 8 HP, 3 ATK, 1 DEF at (14,6)
+    enemies.append(new Enemy("DemoBat",   8, 3, 1, Position(15, 7))); // Spawns Demogorgon with 8 HP, 3 ATK, 1 DEF at (15,7)
     enemies.append(new Enemy("Demogorgon",          7, 2, 0, Position(3,  5))); // Spawns Demogorgon with 7 HP, 2 ATK, 0 DEF at (3,5)
     enemies.append(new Enemy("Demogorgon",        7, 2, 0, Position(12, 3))); // Spawns Demogorgon with 7 HP, 2 ATK, 0 DEF at (12,3)
 }

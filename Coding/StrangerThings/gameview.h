@@ -22,7 +22,7 @@ private:
     QVector<QGraphicsPixmapItem*> enemySprites; // Stores all enemy images inside a vector because there can be multiple enemies
 
     QPixmap pxFloor, pxWall, pxTrap, pxDoorLocked, pxDoorOpen, pxTreasure; // images for floor, wall, trap, locked door, open door, and treasure
-    QPixmap pxEleven, pxPapa; // image for player and enemy
+    QPixmap pxEleven, pxPapa, pxDemogorgon, pxDemoBats, pxMindFlayer; // image for player and enemy
 
     bool spritesLoaded; // checks if images were loaded or not
 
@@ -30,7 +30,6 @@ private:
     int screenW; // stores full screen width in pixels
     int screenH; // stores full screen height in pixels
     int tileSize; // stores calculated tile size depending on screen size
-
     void recalcTileSize(); // calculates tile size depending on map and screen size
     void loadPixmaps(); // loads all the required images
     void drawMap(); //draws the map tiles

@@ -10,11 +10,30 @@
 
 // Creates a solid-color fallback pixmap when an image file is missing
 static QPixmap colorPixmap(QColor c, int w, int h) {
-    QPixmap px(w, h); //create pixmap
-    px.fill(c);//fill it with a color
-    return px;//return the pixmap
+    QPixmap px(w, h); // Create a pixmap with the given width and height
+    px.fill(c);       // Fill the entire pixmap with the chosen color
+    return px;        // Return the generated solid-color pixmap
 }
+// Removes white background from an image by making near-white pixels transparent
+static QPixmap removeWhiteBackground(const QPixmap& src, int threshold = 30) {
+    QImage img = src.toImage().convertToFormat(QImage::Format_ARGB32);
+    // Convert pixmap to image and ensure it supports transparency (ARGB32)
+    for (int y = 0; y < img.height(); y++) { // Loop through each row of pixels
+        for (int x = 0; x < img.width(); x++) { // Loop through each column of pixels
+            QColor c = img.pixelColor(x, y); // Get the color of the current pixel
 
+            // Check if the pixel is close to white based on RGB threshold
+            // If it is, we treat it as background and make it transparent
+            if (c.red()   > 255 - threshold &&
+                c.green() > 255 - threshold &&
+                c.blue()  > 255 - threshold) {
+
+                img.setPixelColor(x, y, Qt::transparent); // Make the pixel fully transparent
+            }
+        }
+    }
+    return QPixmap::fromImage(img); // Convert the modified image back to a pixmap and return it
+}
 //initializes the game view
 GameView::GameView(QWidget* parent)
     : QGraphicsView(parent),// base class constructor
@@ -72,14 +91,23 @@ void GameView::recalcTileSize() {
 
 void GameView::loadPixmaps() {// loads all image assets
     // function to load image or color
-    auto load = [this](const QString& path, QColor fallback) {
-        QPixmap px(path);// try loading image
-        return px.isNull()
-                   ? colorPixmap(fallback, tileSize, tileSize) // Uses fallback color if image fails
-                   : px.scaled(tileSize, tileSize,
-                               Qt::IgnoreAspectRatio,
-                               Qt::SmoothTransformation);// resize image smoothly
-    };
+
+        auto load = [this](const QString& path, QColor fallback) { // Helper function (lambda) to load an image or fall back to a colored tile if loading fails
+            QPixmap px(path); // Try to load the image from file path
+
+            if (px.isNull())  // If the image fails to load, return a simple colored placeholder tile instead
+                return colorPixmap(fallback, tileSize, tileSize);
+            px = removeWhiteBackground(px); // Remove white background from the image for cleaner transparency
+
+            // Create a properly sized pixmap for the game tile
+            QPixmap result(tileSize, tileSize);
+            result.fill(Qt::transparent); // Start with a transparent background
+            QPainter painter(&result);
+            painter.setRenderHint(QPainter::SmoothPixmapTransform); // Enable smooth scaling for better visual quality
+            painter.drawPixmap(result.rect(), px.scaled(tileSize, tileSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation)); // Scale and draw the image into the tile area
+            painter.end(); // Finish painting
+            return result; // Return the final processed pixmap
+        };
 
     //load all tile images
     pxFloor      = load(":/assets/floor.png", QColor(50,  50,  60));
@@ -90,6 +118,9 @@ void GameView::loadPixmaps() {// loads all image assets
     pxTreasure   = load(":/assets/treasure.png", QColor(255, 210, 0));
     pxEleven     = load(":/assets/eleven.png", QColor(60,  120, 255));
     pxPapa       = load(":/assets/papa.png", QColor(200, 40,  40));
+    pxDemogorgon = load(":/assets/demogorgon.png", QColor(200, 40,  40));
+    pxDemoBats   = load(":/assets/demobat.png", QColor(200, 40,  40));
+    pxMindFlayer = load(":/assets/mindflayer.png", QColor(200, 40,  40));
 
     spritesLoaded = true;//shows that images have loaded
 }
@@ -125,10 +156,23 @@ void GameView::initLevel(Level* lvl) {
     playerSprite->setZValue(2);// draw above tiles
 
     // One sprite per enemy
+    // Loop through all enemies in the current level
     for (int i = 0; i < level->getEnemies().size(); i++) {
-        QGraphicsPixmapItem* sp = scene->addPixmap(pxPapa); // Creates a sprite for each enemy
-        sp->setZValue(2);// draw above tiles
-        enemySprites.append(sp); // Adds sprite into vector
+        Enemy* e = level->getEnemies()[i]; // Get the current enemy from the list
+        QPixmap spriteToUse;               // This will store the correct sprite for each enemy
+
+        // Choose the correct image based on the enemy type (name)
+        if (e->getName() == "MindFlayer")
+            spriteToUse = pxMindFlayer;   // Assign MindFlayer sprite
+        else if (e->getName() == "DemoBat")
+            spriteToUse = pxDemoBats;     // Assign DemoBat sprite
+        else if (e->getName() == "Papa")
+            spriteToUse = pxPapa;         // Assign Papa sprite
+        else
+            spriteToUse = pxDemogorgon;   // Default sprite for Demogorgon or unknown enemies
+        QGraphicsPixmapItem* sp = scene->addPixmap(spriteToUse); // Add the enemy sprite to the scene
+        sp->setZValue(2); // Set rendering order so enemies appear above background elements correctly
+        enemySprites.append(sp); // Store the sprite so it can be updated or removed later if needed
     }
 
     // HUD sits just below the map

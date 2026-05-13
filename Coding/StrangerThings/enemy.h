@@ -7,24 +7,14 @@
 #include "tile.h"               // defines tile types (wall, floor, etc.)
 
 class Player;                   // forward declaration so we can use Player pointer without full include
-
 class Enemy : public Character { // Enemy is a type of Character (inherits HP, ATK, DEF, position, etc.)
 public:
-    Enemy(QString name, int hp, int atk, int def, Position pos);
-    // constructor: creates an enemy with name, stats, and starting position
-
-    void takeTurn(Player* player, GridMap* map,
-                  const QVector<Enemy*>& allEnemies);
+    Enemy(QString name, int hp, int atk, int def, Position pos); // constructor: creates an enemy with name, stats, and starting position
+    void takeTurn(Player* player, GridMap* map, const QVector<Enemy*>& allEnemies);
     // main AI function: controls what enemy does during its turn
     // uses player position + map + other enemies for decisions (move/attack/etc.)
-
-    bool isAdjacentTo(Position p) const;
-    // checks if a given position is next to the enemy (used for melee attacks)
-
-    Position getNextMoveToward(Position target, GridMap* map,
-                               const QVector<Enemy*>& allEnemies) const;
-    // AI path decision: calculates best next step toward a target (usually the player)
+    bool isAdjacentTo(Position p) const; // checks if a given position is next to the enemy (used for melee attacks)
+    Position getNextMoveToward(Position target, GridMap* map, const QVector<Enemy*>& allEnemies) const; // AI path decision: calculates best next step toward a target (usually the player)
     // avoids walls, traps, and other enemies using map data
 };
-
 #endif

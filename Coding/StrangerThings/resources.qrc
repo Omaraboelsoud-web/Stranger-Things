@@ -5,6 +5,9 @@
         <file>assets/eleven.png</file>
         <file>assets/treasure.png</file>
         <file>assets/trap.png</file>
+        <file>assets/demogorgon.png</file>
         <file>assets/papa.png</file>
+        <file>assets/mindflayer.png</file>
+        <file>assets/demobat.png</file>
     </qresource>
 </RCC>
