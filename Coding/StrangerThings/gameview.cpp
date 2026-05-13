@@ -51,10 +51,6 @@ GameView::GameView(QWidget* parent)
     screenW = screenRect.width(); // Stores the width of the screen
     screenH = screenRect.height(); // Stores the height of the screen
 
-    // Remove scrollbars
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);// disable horizontal scroll
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);// disable vertical scroll
-
     // Fill entire screen
     setFixedSize(screenW, screenH); // Makes the game window take the full screen size
     showFullScreen(); // Displays the game in fullscreen mode
@@ -62,8 +58,7 @@ GameView::GameView(QWidget* parent)
     setFocusPolicy(Qt::StrongFocus);// allows keyboard input
     setBackgroundBrush(QColor(10, 10, 15));// dark background color
 
-    // Default tile size -- will be recalculated in initLevel()
-    tileSize = TILE; // Sets default tile size before recalculating
+
 }
 
 GameView::~GameView() {}// destructor

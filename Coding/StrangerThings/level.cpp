@@ -51,7 +51,6 @@ void Level::buildLevel1() { // Defines the function that builds level 1 "The Lab
     enemies.append(new Enemy("Papa", 8, 2, 0, Position(9, 6))); // Spawns enemy Papa with 8 HP, 2 ATK, 0 DEF at position (9,6)
 }
 
-// ============================================================
 //  Level 2 -- "The Upside Down Tunnels"
 //  Wider map (14x9), two enemies, two traps, narrower corridors.
 //
