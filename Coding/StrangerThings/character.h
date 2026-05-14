@@ -27,6 +27,7 @@ public: //public because I wabt it to be accessible anywhere in the program
     bool isAlive()      const; // returns whether the character is alive or not
     void takeDamage(int amount); //This will reduce the health when the character gets hit
     void move(Position newPos); // This will move the character to the newer place on the gridmap
+
 };
 
 #endif

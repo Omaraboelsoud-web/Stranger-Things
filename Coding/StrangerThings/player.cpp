@@ -16,7 +16,7 @@ bool Player::useAP(int cost) { // Defines a function that tries to use action po
 
 bool Player::canUsePsychicAttack(Position targetPos, GridMap* map) const { //Defines a function that checks whether a psychic attack is valid
     if (position.x != targetPos.x && position.y != targetPos.y) return false; //Ensures the target is in the same row or column
-    if (position.distanceTo(targetPos) > 3) return false; //Ensures the target is within attack range
+    if (position.distanceTo(targetPos) > 1) return false; //Ensures the target is within attack range
     int stepx = 0, stepy = 0; // Declares variables to store movement direction
     if (targetPos.x > position.x)      stepx = 1;
     else if (targetPos.x < position.x) stepx = -1;

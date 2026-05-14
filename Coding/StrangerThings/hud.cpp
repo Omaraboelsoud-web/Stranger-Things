@@ -47,7 +47,7 @@ HUD::HUD(QGraphicsScene* s, int mapHeightPx)
 void HUD::update(Player* p, Enemy* primaryEnemy, bool isPlayerTurn,
                  int levelNum, const QVector<Enemy*>& allEnemies) //Defines a function that updates the HUD using player, enemy, level, and turn state
 {
-    // Plain ASCII health bar: uses | for filled and - for empty
+    // Health bar
     auto bar = [](int cur, int max, int len = 8) { // Declares a lambda function named bar that generates a visual bar based on values. Auto is used because function type can change
         int filled = (max > 0) ? (cur * len / max) : 0; // Calculates how many segments of the bar should be filled
         QString s = "["; // declares string and starts the health bar with [
@@ -93,7 +93,7 @@ void HUD::update(Player* p, Enemy* primaryEnemy, bool isPlayerTurn,
 
     enemyInfo->setPlainText(eText); // Updates enemy information text on screen
 
-    // Turn info -- plain ASCII arrow instead of special char
+    // Turn info
     turnInfo->setPlainText( // Updates turn information text
         isPlayerTurn
             ? "> YOUR TURN  [WASD/Arrows=move | Q=psychic | Enter=end turn | F5=Save | F9=Load]"

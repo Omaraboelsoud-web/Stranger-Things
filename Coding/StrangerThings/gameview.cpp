@@ -58,7 +58,8 @@ GameView::GameView(QWidget* parent)
     setFocusPolicy(Qt::StrongFocus);// allows keyboard input
     setBackgroundBrush(QColor(10, 10, 15));// dark background color
 
-
+    // Default tile size will be recalculated in initLevel()
+    tileSize = TILE; // Sets default tile size before recalculating
 }
 
 GameView::~GameView() {}// destructor
